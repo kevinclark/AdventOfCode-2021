@@ -7,13 +7,21 @@ struct Position {
     aim: u32,
 }
 
+fn parse<'a>(input: &'a str) -> impl Iterator<Item = (&'a str, u32)> {
+    input
+        .split(&['\n', ' '][..])
+        .tuples()
+        .map(|(direction, distance)| (direction, distance.parse::<u32>().unwrap()))
+}
+
 pub fn part_1(input: &str) -> u32 {
-    let instructions = input.split(&['\n', ' '][..]).tuples();
+    let instructions = parse(input);
+
     let Position {
         depth, distance, ..
-    } = instructions.fold(Position::default(), |current, (direction, distance)| {
-        let distance = distance.parse::<u32>().unwrap();
-        match direction {
+    } = instructions.fold(
+        Position::default(),
+        |current, (direction, distance)| match direction {
             "forward" => Position {
                 distance: current.distance + distance,
                 ..current
@@ -27,19 +35,20 @@ pub fn part_1(input: &str) -> u32 {
                 ..current
             },
             _ => panic!("Unknown direction: {}", direction),
-        }
-    });
+        },
+    );
 
     depth * distance
 }
 
 pub fn part_2(input: &str) -> u32 {
-    let instructions = input.split(&['\n', ' '][..]).tuples();
+    let instructions = parse(input);
+
     let Position {
         depth, distance, ..
-    } = instructions.fold(Position::default(), |current, (direction, distance)| {
-        let distance = distance.parse::<u32>().unwrap();
-        match direction {
+    } = instructions.fold(
+        Position::default(),
+        |current, (direction, distance)| match direction {
             "forward" => Position {
                 distance: current.distance + distance,
                 depth: current.depth + (current.aim * distance),
@@ -54,8 +63,8 @@ pub fn part_2(input: &str) -> u32 {
                 ..current
             },
             _ => panic!("Unknown direction: {}", direction),
-        }
-    });
+        },
+    );
 
     depth * distance
 }

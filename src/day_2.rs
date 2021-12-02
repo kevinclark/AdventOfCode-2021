@@ -7,7 +7,7 @@ struct Position {
     aim: u32,
 }
 
-pub fn parse<'a>(input: &'a str) -> impl Iterator<Item = (&'a str, u32)> {
+pub fn parse(input: &str) -> impl Iterator<Item = (&str, u32)> {
     input
         .split(&['\n', ' '][..])
         .tuples()

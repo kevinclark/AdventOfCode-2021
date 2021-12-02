@@ -34,6 +34,6 @@ fn count_increases<T: Clone + Iterator<Item = u32>>(depths: T) -> u32 {
         })
 }
 
-fn parse<'a>(input: &'a str) -> impl Iterator<Item = u32> + Clone + 'a {
-    input.split("\n").map(|s| s.parse::<u32>().unwrap_or(0))
+fn parse(input: &str) -> impl Iterator<Item = u32> + Clone + '_ {
+    input.split('\n').map(|s| s.parse::<u32>().unwrap_or(0))
 }

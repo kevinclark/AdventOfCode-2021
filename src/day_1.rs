@@ -1,8 +1,18 @@
 use itertools::Itertools;
 
-pub fn solve(input: &str) -> u32 {
+pub fn part_2(input: &str) -> u32 {
+    let depths = parse(input).tuple_windows().map(|(a, b, c)| a + b + c);
+
+    count_increases(depths)
+}
+
+pub fn part_1(input: &str) -> u32 {
     let depths = parse(input);
 
+    count_increases(depths)
+}
+
+fn count_increases<T: Clone + Iterator<Item = u32>>(depths: T) -> u32 {
     let starting_at_0 = depths.clone();
     let starting_at_1 = depths.skip(1);
 
@@ -17,8 +27,7 @@ pub fn solve(input: &str) -> u32 {
                         0
                     }
                 }
-                itertools::EitherOrBoth::Left(_) => 0,
-                itertools::EitherOrBoth::Right(_) => 0,
+                _ => 0,
             };
 
             count + value

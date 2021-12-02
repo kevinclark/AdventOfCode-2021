@@ -29,15 +29,20 @@ fn main() {
     let opts = Options::parse();
     let input = &fs::read_to_string(opts.input).expect("Unable to read input file");
 
-    match opts.subcmd {
+    let result = match opts.subcmd {
         SubCommand::Day1(part) => match part {
-            Part::One => println!("{}", day_1::part_1(input)),
-            Part::Two => println!("{}", day_1::part_2(input)),
+            Part::One => day_1::part_1(input),
+            Part::Two => day_1::part_2(input),
         },
 
-        SubCommand::Day2(part) => match part {
-            Part::One => println!("{}", day_2::part_1(input)),
-            Part::Two => println!("{}", day_2::part_2(input)),
-        },
+        SubCommand::Day2(part) => {
+            let parsed = day_2::parse(input);
+            match part {
+                Part::One => day_2::part_1(parsed),
+                Part::Two => day_2::part_2(parsed),
+            }
+        }
     };
+
+    println!("{}", result);
 }

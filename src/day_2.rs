@@ -7,16 +7,14 @@ struct Position {
     aim: u32,
 }
 
-fn parse<'a>(input: &'a str) -> impl Iterator<Item = (&'a str, u32)> {
+pub fn parse<'a>(input: &'a str) -> impl Iterator<Item = (&'a str, u32)> {
     input
         .split(&['\n', ' '][..])
         .tuples()
         .map(|(direction, distance)| (direction, distance.parse::<u32>().unwrap()))
 }
 
-pub fn part_1(input: &str) -> u32 {
-    let instructions = parse(input);
-
+pub fn part_1<'a, T: Iterator<Item = (&'a str, u32)>>(instructions: T) -> u32 {
     let Position {
         depth, distance, ..
     } = instructions.fold(
@@ -41,9 +39,7 @@ pub fn part_1(input: &str) -> u32 {
     depth * distance
 }
 
-pub fn part_2(input: &str) -> u32 {
-    let instructions = parse(input);
-
+pub fn part_2<'a, T: Iterator<Item = (&'a str, u32)>>(instructions: T) -> u32 {
     let Position {
         depth, distance, ..
     } = instructions.fold(

@@ -37,7 +37,7 @@ fn main() {
 
         SubCommand::Day2(part) => match part {
             Part::One => println!("{}", day_2::part_1(input)),
-            _ => panic!("Not implemented"),
+            Part::Two => println!("{}", day_2::part_2(input)),
         },
     };
 }

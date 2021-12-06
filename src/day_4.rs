@@ -4,6 +4,7 @@ use ndarray::Array2;
 pub struct BingoBoard {
     spaces: Array2<u32>,
     matches: Vec<u32>,
+    winning_number: Option<u32>,
 }
 
 impl BingoBoard {
@@ -11,10 +12,15 @@ impl BingoBoard {
         BingoBoard {
             spaces,
             matches: vec![],
+            winning_number: None,
         }
     }
 
     fn score_after(&mut self, num: u32) -> Option<u32> {
+        if self.winning_number.is_some() {
+            return self.score();
+        }
+
         if self.spaces.iter().any(|s| *s == num) {
             self.matches.push(num);
         }
@@ -31,16 +37,22 @@ impl BingoBoard {
                     .into_iter()
                     .any(|col| col.iter().all(|space| self.matches.contains(space))))
         {
-            let sum_of_non_matches: u32 = self
-                .spaces
-                .iter()
-                .filter(|s| !self.matches.contains(s))
-                .sum();
+            self.winning_number = Some(num);
 
-            return Some(sum_of_non_matches * num);
+            return self.score();
         }
 
         None
+    }
+
+    fn score(&self) -> Option<u32> {
+        self.winning_number.map(|num| {
+            num * self
+                .spaces
+                .iter()
+                .filter(|s| !self.matches.contains(s))
+                .sum::<u32>()
+        })
     }
 }
 
@@ -77,13 +89,28 @@ pub fn parse(input: &str) -> BingoGame {
 
     BingoGame { numbers, boards }
 }
+
 pub fn part_1(game: BingoGame) -> u32 {
     let mut boards = game.boards;
     for number in game.numbers {
-        for board in boards.iter_mut() {
-            if let Some(score) = board.score_after(number) {
-                return score;
-            }
+        if let Some(score) = boards.iter_mut().find_map(|b| b.score_after(number)) {
+            return score;
+        }
+    }
+
+    0
+}
+
+pub fn part_2(game: BingoGame) -> u32 {
+    let mut boards = game.boards;
+    for number in game.numbers {
+        if boards.len() > 1 {
+            boards.iter_mut().for_each(|b| {
+                b.score_after(number);
+            });
+            boards.retain(|b| b.winning_number.is_none());
+        } else if let Some(score) = boards[0].score_after(number) {
+            return score;
         }
     }
 
@@ -139,6 +166,10 @@ mod tests {
         assert_eq!(None, board.score_after(22));
         assert_eq!(None, board.score_after(21));
         assert_eq!(Some(3800), board.score_after(20));
+
+        // Doesn't change afterwards
+        assert_eq!(Some(3800), board.score_after(19));
+        assert_eq!(Some(20), board.winning_number);
     }
 
     #[test]
@@ -150,5 +181,9 @@ mod tests {
         assert_eq!(None, board.score_after(10));
         assert_eq!(None, board.score_after(15));
         assert_eq!(Some(5000), board.score_after(20));
+
+        // Doesn't change afterwards
+        assert_eq!(Some(5000), board.score_after(19));
+        assert_eq!(Some(20), board.winning_number);
     }
 }

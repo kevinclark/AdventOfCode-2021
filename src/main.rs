@@ -61,7 +61,7 @@ fn main() {
 
             match part {
                 Part::One => day_4::part_1(parsed),
-                Part::Two => panic!("Not yet"),
+                Part::Two => day_4::part_2(parsed),
             }
         }
     };

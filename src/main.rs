@@ -37,15 +37,15 @@ fn main() {
 
     let result = match opts.subcmd {
         SubCommand::Day1(part) => match part {
-            Part::One => day_1::part_1(input),
-            Part::Two => day_1::part_2(input),
+            Part::One => day_1::part_1(input) as usize,
+            Part::Two => day_1::part_2(input) as usize,
         },
 
         SubCommand::Day2(part) => {
             let parsed = day_2::parse(input);
             match part {
-                Part::One => day_2::part_1(parsed),
-                Part::Two => day_2::part_2(parsed),
+                Part::One => day_2::part_1(parsed) as usize,
+                Part::Two => day_2::part_2(parsed) as usize,
             }
         }
 
@@ -53,8 +53,8 @@ fn main() {
             let parsed = day_3::parse::<12>(input);
 
             match part {
-                Part::One => day_3::part_1(parsed),
-                Part::Two => day_3::part_2(parsed),
+                Part::One => day_3::part_1(parsed) as usize,
+                Part::Two => day_3::part_2(parsed) as usize,
             }
         }
 
@@ -62,8 +62,8 @@ fn main() {
             let parsed = day_4::parse(input);
 
             match part {
-                Part::One => day_4::part_1(parsed),
-                Part::Two => day_4::part_2(parsed),
+                Part::One => day_4::part_1(parsed) as usize,
+                Part::Two => day_4::part_2(parsed) as usize,
             }
         }
 
@@ -71,8 +71,8 @@ fn main() {
             let parsed = day_6::parse(input);
 
             match part {
-                Part::One => day_6::part_1(parsed, 80) as u32,
-                Part::Two => panic!("Not yet"),
+                Part::One => day_6::part_1(parsed, 80),
+                Part::Two => day_6::part_2(parsed, 256),
             }
         }
     };

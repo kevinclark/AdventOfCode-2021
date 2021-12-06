@@ -41,6 +41,14 @@ pub fn part_1(lines: Vec<Line>) -> usize {
         .iter()
         .filter(|l| l.is_horizontal() || l.is_vertical());
 
+    how_many_points_with_intersections(lines)
+}
+
+pub fn part_2(lines: Vec<Line>) -> usize {
+    how_many_points_with_intersections(lines.iter())
+}
+
+fn how_many_points_with_intersections<'a>(lines: impl Iterator<Item = &'a Line> + Clone) -> usize {
     let max_x = lines
         .clone()
         .flat_map(|l| [l.start.0, l.end.0])
@@ -61,8 +69,6 @@ pub fn part_1(lines: Vec<Line>) -> usize {
             if let Some(_first) = containing.next() {
                 if let Some(_second) = containing.next() {
                     count += 1;
-
-                    //println!("({}, {}) matches: {:?} and {:?}", x, y, first, second);
                 }
             }
         }

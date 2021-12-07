@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::PathBuf;
 
-use aoc21::{day_1, day_2, day_3, day_4, day_5, day_6};
+use aoc21::{day_1, day_2, day_3, day_4, day_5, day_6, day_7};
 use clap::Parser;
 
 #[derive(Parser, Debug)]
@@ -31,6 +31,8 @@ enum SubCommand {
     Day5(Part),
     #[clap(subcommand)]
     Day6(Part),
+    #[clap(subcommand)]
+    Day7(Part),
 }
 
 fn main() {
@@ -84,6 +86,15 @@ fn main() {
             match part {
                 Part::One => day_6::part_1(parsed, 80),
                 Part::Two => day_6::part_2(parsed, 256),
+            }
+        }
+
+        SubCommand::Day7(part) => {
+            let parsed = day_7::parse(input);
+
+            match part {
+                Part::One => day_7::part_1(parsed),
+                Part::Two => panic!("Not yet"),
             }
         }
     };
